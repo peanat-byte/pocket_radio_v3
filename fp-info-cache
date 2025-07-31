@@ -1,4 +1,4 @@
-24739113217064729
+24740866980429413
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -99518,6 +99518,13 @@ AudioJackConnector_4Conductor_3.5xL14mm_THT
 0
 5
 4
+_Project_Library
+Peanut
+
+
+0
+0
+0
 _Project_Library
 Skyworks_Si470405-D60_QFN-20_1EP_3x3_P0.5mm
 (https://www.skyworksinc.com/-/media/Skyworks/SL/documents/public/data-sheets/Si4704-05-D60.pdf)
