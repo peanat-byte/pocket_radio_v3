@@ -34,7 +34,7 @@
 			)
 		)
 		(property "Datasheet" "https://tensility.s3.us-west-2.amazonaws.com/uploads/pdffiles/54-00174.pdf"
-			(at 0 0 0)
+			(at -0.635 -15.875 0)
 			(effects
 				(font
 					(size 1.27 1.27)
