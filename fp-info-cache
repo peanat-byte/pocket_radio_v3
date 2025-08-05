@@ -1,4 +1,4 @@
-24740866980429413
+24751394287540766
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -99519,6 +99519,27 @@ AudioJackConnector_4Conductor_3.5xL14mm_THT
 5
 4
 _Project_Library
+Crystal_SMD_2Pin_11.7x5mm
+(https://abracon.com/datasheets/Fox/FC4SD.pdf?utm_source=foxonline.com&utm_medium=301)
+crystal clock
+0
+2
+2
+_Project_Library
+EmbeddedAntenna_Si47xx
+(https://www.skyworksinc.com/-/media/Skyworks/SL/documents/public/application-notes/AN383.pdf)
+
+0
+1
+1
+_Project_Library
+ExposedPad_2Conn_2x3mm_P3mm
+
+
+0
+2
+2
+_Project_Library
 Peanut
 
 
@@ -99526,9 +99547,30 @@ Peanut
 0
 0
 _Project_Library
+PinHeader_1x04_P2.54mm_Vertical_Tight
+
+
+0
+4
+4
+_Project_Library
+PinHeader_1x07_P2.54mm_Vertical_Tight
+
+
+0
+7
+7
+_Project_Library
 Skyworks_Si470405-D60_QFN-20_1EP_3x3_P0.5mm
 (https://www.skyworksinc.com/-/media/Skyworks/SL/documents/public/data-sheets/Si4704-05-D60.pdf)
 
 0
 37
 21
+_Project_Library
+ViaJumper_Pitch2.54mm_Drill0.7mm
+
+
+0
+2
+2

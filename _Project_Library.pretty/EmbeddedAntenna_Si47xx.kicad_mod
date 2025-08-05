@@ -1,0 +1,140 @@
+(footprint "EmbeddedAntenna_Si47xx"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "(https://www.skyworksinc.com/-/media/Skyworks/SL/documents/public/application-notes/AN383.pdf)")
+	(property "Reference" "REF**"
+		(at 0 2 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "3a3ca192-af78-449e-bc42-79513c58d003")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "EmbeddedAntenna_Si47xx"
+		(at 0 4 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "4798c294-cb77-4ca0-a29b-4a09480cfebc")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 20.25 15 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ca4852b4-967e-4701-805f-6c791f59f627")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 20.25 15 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "48d3c210-182a-421a-8cd4-0ccbfdc706bc")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd allow_missing_courtyard)
+	(fp_line
+		(start 0 0)
+		(end 75 0)
+		(stroke
+			(width 1)
+			(type solid)
+		)
+		(layer "F.Cu")
+		(uuid "1c570119-d774-4e52-9310-6c84e7b6ca13")
+	)
+	(fp_line
+		(start 75 0)
+		(end 75 50)
+		(stroke
+			(width 1)
+			(type solid)
+		)
+		(layer "F.Cu")
+		(uuid "8a7108ef-fc4a-451c-81d3-56b6d35bc2e8")
+	)
+	(fp_line
+		(start 75 50)
+		(end 0 50)
+		(stroke
+			(width 1)
+			(type solid)
+		)
+		(layer "F.Cu")
+		(uuid "367dec7d-f036-418f-98bd-627229c3daea")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "38e95a6b-d306-4b94-85cb-987161e860a1")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" smd circle
+		(at 0 0)
+		(size 1 1)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "db4de0fc-a33e-44a8-bfc3-cd8a86c1fb82")
+	)
+	(zone
+		(net 0)
+		(net_name "")
+		(layer "F.Cu")
+		(uuid "b2099c8e-34d0-49d4-91cc-f3b6ea91c752")
+		(hatch edge 0.5)
+		(connect_pads
+			(clearance 0)
+		)
+		(min_thickness 0.25)
+		(filled_areas_thickness no)
+		(keepout
+			(tracks not_allowed)
+			(vias not_allowed)
+			(pads not_allowed)
+			(copperpour not_allowed)
+			(footprints not_allowed)
+		)
+		(placement
+			(enabled no)
+			(sheetname "")
+		)
+		(fill
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+		)
+		(polygon
+			(pts
+				(xy -6 -6.044944) (xy 81 -6.002899) (xy 81 56) (xy -6 56) (xy -6 44) (xy 69 44) (xy 69 6.002531)
+				(xy -6 6.05)
+			)
+		)
+	)
+	(embedded_fonts no)
+)

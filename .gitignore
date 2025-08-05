@@ -1,0 +1,5 @@
+pocket_radio_v3-backups/
+*.bak
+simulations/*.raw
+simulations/*.op.raw
+simulations/*.log
