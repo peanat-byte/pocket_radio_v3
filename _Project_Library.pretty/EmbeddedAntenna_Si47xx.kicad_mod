@@ -56,8 +56,8 @@
 	)
 	(attr smd allow_missing_courtyard)
 	(fp_line
-		(start 0 0)
-		(end 75 0)
+		(start 4 0)
+		(end 73 0)
 		(stroke
 			(width 1)
 			(type solid)
@@ -66,8 +66,8 @@
 		(uuid "1c570119-d774-4e52-9310-6c84e7b6ca13")
 	)
 	(fp_line
-		(start 75 0)
-		(end 75 50)
+		(start 73 0)
+		(end 73 50)
 		(stroke
 			(width 1)
 			(type solid)
@@ -76,8 +76,8 @@
 		(uuid "8a7108ef-fc4a-451c-81d3-56b6d35bc2e8")
 	)
 	(fp_line
-		(start 75 50)
-		(end 0 50)
+		(start 73 50)
+		(end 5 50)
 		(stroke
 			(width 1)
 			(type solid)
@@ -97,10 +97,11 @@
 			)
 		)
 	)
-	(pad "1" smd circle
-		(at 0 0)
-		(size 1 1)
-		(layers "F.Cu" "F.Mask" "F.Paste")
+	(pad "1" smd roundrect
+		(at 2 0)
+		(size 5 1)
+		(layers "F.Cu")
+		(roundrect_rratio 0.5)
 		(uuid "db4de0fc-a33e-44a8-bfc3-cd8a86c1fb82")
 	)
 	(zone
@@ -115,7 +116,7 @@
 		(min_thickness 0.25)
 		(filled_areas_thickness no)
 		(keepout
-			(tracks not_allowed)
+			(tracks allowed)
 			(vias not_allowed)
 			(pads not_allowed)
 			(copperpour not_allowed)
@@ -131,7 +132,7 @@
 		)
 		(polygon
 			(pts
-				(xy -6 -6.044944) (xy 81 -6.002899) (xy 81 56) (xy -6 56) (xy -6 44) (xy 69 44) (xy 69 6.002531)
+				(xy -6 -6.044944) (xy 79 -6.003866) (xy 79 56) (xy -1 56) (xy -1 44) (xy 67 44) (xy 67 6.003797)
 				(xy -6 6.05)
 			)
 		)
