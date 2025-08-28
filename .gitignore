@@ -3,3 +3,4 @@ pocket_radio_v3-backups/
 simulations/*.raw
 simulations/*.op.raw
 simulations/*.log
+fw/.metadata
