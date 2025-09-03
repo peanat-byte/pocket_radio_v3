@@ -58,11 +58,11 @@ static void MX_USART2_UART_Init(void);
 void Print_UART(char *str);
 void Power_Up(void);
 void Get_Rev(void);
-void Set_Property(void/*uint8_t property, uint8_t value*/);
+void Set_Property(uint8_t property, uint8_t value);
 void Get_Property(void);
-void FM_Tune_Freq(uint16_t channel);
-void FM_Tune_Status(void);
-void FM_Seek_start(uint8_t direction);
+void Tune_Freq(uint16_t channel);
+void Tune_Status(void);
+void Seek_Start(uint8_t up);
 void GPIO_Ctl(void);
 void GPIO_Set(void);
 uint8_t Read_Status(void);
@@ -113,21 +113,22 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
-
-	  HAL_GPIO_WritePin(GPIOB, DIG2_Pin, GPIO_PIN_SET);
+	  HAL_GPIO_WritePin(GPIOB, IND_Pin, GPIO_PIN_SET);
 
 	  HAL_Delay(1000);
 
 	  char msg[64];
-	  sprintf(msg, "I'M ALIVEEEE");
+	  sprintf(msg, "I'M ALIVEEEE\r\n");
 	  Print_UART(msg);
 
 	  Power_Up();
 	  Get_Rev();
-	  Set_Property();
-	  FM_Tune_Freq(10350);
-	  FM_Tune_Status();
+	  // RX_VOLUME 0x4000 allowed 0-63, set to 30 (0x001E)
+	  Set_Property(0x4000, 0x001E);
+	  // FM_ANTENNA_INPUT 0x1107 0x0001 (LPI antenna input)
+	  Set_Property(0x1107, 0x0001);
+	  Tune_Freq(10350);
+	  Tune_Status();
 
 	  while (1)
 	  {
@@ -380,19 +381,18 @@ void Get_Rev(void)
 /*
 * CMD 0x12 (SET_PROPERTY)
 * ARG1 0x00
-* ARG2 (property high byte) 0x11
-* ARG3 (property low byte) 0x07
-* ARG4 (value high byte) 0x00
-* ARG5(value low byte) 0x01 (LPI antenna input)
+* ARG2 (property high byte)
+* ARG3 (property low byte)
+* ARG4 (value high byte)
+* ARG5(value low byte)
 *
-* TODO: currently just sets antenna to LPI lol
 * Properties:
-* 	FM_ANTENNA_INPUT 0x1107
-* 	RX_VOLUME 0x4000
+* 	FM_ANTENNA_INPUT 0x1107 0x0001 (LPI antenna input)
+* 	RX_VOLUME 0x4000 0-63 (dec)
 */
-void Set_Property(void/*uint8_t property, uint8_t value*/)
+void Set_Property(uint16_t property, uint16_t value)
 {
-  uint8_t cmd[6] = {0x12, 0x00, 0x11, 0x07, 0x00, 0x01};
+  uint8_t cmd[6] = {0x12, 0x00, (property >> 8) & 0xFF, property & 0xFF, (value >> 8) & 0xFF, value & 0xFF};
   HAL_I2C_Master_Transmit(&hi2c1, ADDR, cmd, sizeof(cmd), HAL_MAX_DELAY);
   HAL_Delay(100);
 }
@@ -413,7 +413,7 @@ void Get_Property(void)
 *
 * @param channel in 10kHz units from 64-108MHz
 */
-void FM_Tune_Freq(uint16_t channel)
+void Tune_Freq(uint16_t channel)
 {
   uint8_t FREQ_H = (channel >> 8) & 0xFF;
   uint8_t FREQ_L = channel & 0xFF;
@@ -428,7 +428,7 @@ void FM_Tune_Freq(uint16_t channel)
 * 	CANCEL 0 (don't cancel seek) (bit 1)
 * 	INTACK 0 (don't clear seek/tune interrupt status indicator) (bit 0)
 */
-void FM_Tune_Status(void)
+void Tune_Status(void)
 {
   uint8_t cmd[2] = {0x22, 0x00};
   HAL_I2C_Master_Transmit(&hi2c1, ADDR, cmd, sizeof(cmd), HAL_MAX_DELAY);
@@ -451,9 +451,24 @@ void FM_Tune_Status(void)
   Print_UART(msg);
 }
 
-void FM_Seek_start(uint8_t direction)
+/*
+ * CMD 0x21 (FM_SEEK_START)
+ * ARG1 0x0C
+ *	 SEEKUP 1 (bit 3)
+ *	 WRAP 1 (bit 2)
+ *
+ * @param up: 1 to seek up, 0 to seek down
+ */
+void Seek_Start(uint8_t up)
 {
-  // TODO
+    uint8_t arg1 = 0x04;
+    if (direction) {
+        arg1 |= 0x08;
+    }
+
+	uint8_t cmd[2] = {0x21, arg1};
+	HAL_I2C_Master_Transmit(&hi2c1, ADDR, cmd, sizeof(cmd), HAL_MAX_DELAY);
+	HAL_Delay(100);
 }
 
 void GPIO_Ctl(void)
