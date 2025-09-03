@@ -59,10 +59,13 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define VOL_P_Pin GPIO_PIN_0
 #define VOL_P_GPIO_Port GPIOB
+#define VOL_P_EXTI_IRQn EXTI0_1_IRQn
 #define CHAN_M_Pin GPIO_PIN_1
 #define CHAN_M_GPIO_Port GPIOB
+#define CHAN_M_EXTI_IRQn EXTI0_1_IRQn
 #define CHAN_P_Pin GPIO_PIN_2
 #define CHAN_P_GPIO_Port GPIOB
+#define CHAN_P_EXTI_IRQn EXTI2_3_IRQn
 #define DIG1_Pin GPIO_PIN_11
 #define DIG1_GPIO_Port GPIOB
 #define DIG2_Pin GPIO_PIN_12
@@ -75,6 +78,7 @@ void Error_Handler(void);
 #define IND_GPIO_Port GPIOB
 #define VOL_M_Pin GPIO_PIN_3
 #define VOL_M_GPIO_Port GPIOB
+#define VOL_M_EXTI_IRQn EXTI2_3_IRQn
 #define ADDR_SEL_Pin GPIO_PIN_5
 #define ADDR_SEL_GPIO_Port GPIOB
 #define GPO1_Pin GPIO_PIN_8

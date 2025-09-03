@@ -18,11 +18,11 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include <stdio.h>
-#include <string.h>
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,6 +46,7 @@ I2C_HandleTypeDef hi2c1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
+volatile uint16_t volume = 0x001E;
 
 /* USER CODE END PV */
 
@@ -58,7 +59,7 @@ static void MX_USART2_UART_Init(void);
 void Print_UART(char *str);
 void Power_Up(void);
 void Get_Rev(void);
-void Set_Property(uint8_t property, uint8_t value);
+void Set_Property(uint16_t property, uint16_t value);
 void Get_Property(void);
 void Tune_Freq(uint16_t channel);
 void Tune_Status(void);
@@ -71,7 +72,37 @@ void Wait_For_CTS(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
+{
+	if (GPIO_Pin == CHAN_M_Pin)
+	{
+		Seek_Start(0);   // Seek down
+	}
+	else if (GPIO_Pin == CHAN_P_Pin)
+	{
+		Seek_Start(1);   // Seek up
+	}
+	else if (GPIO_Pin == VOL_M_Pin)
+	{
+		volume -= 5;
+		if (volume < 5)
+		{
+			volume = 5;
+		}
+		// RX_VOLUME 0x4000 allowed 0-63, set to volume
+	    Set_Property(0x4000, volume);
+	}
+	else if (GPIO_Pin == VOL_P_Pin)
+	{
+		volume += 5;
+		if (volume > 60)
+		{
+			volume = 60;
+		}
+		// RX_VOLUME 0x4000 allowed 0-63, set to volume
+		Set_Property(0x4000, volume);
+	}
+}
 /* USER CODE END 0 */
 
 /**
@@ -114,7 +145,6 @@ int main(void)
   while (1)
   {
 	  HAL_GPIO_WritePin(GPIOB, IND_Pin, GPIO_PIN_SET);
-
 	  HAL_Delay(1000);
 
 	  char msg[64];
@@ -123,10 +153,15 @@ int main(void)
 
 	  Power_Up();
 	  Get_Rev();
+
 	  // RX_VOLUME 0x4000 allowed 0-63, set to 30 (0x001E)
 	  Set_Property(0x4000, 0x001E);
+	  HAL_Delay(100);
+
 	  // FM_ANTENNA_INPUT 0x1107 0x0001 (LPI antenna input)
 	  Set_Property(0x1107, 0x0001);
+	  HAL_Delay(100);
+
 	  Tune_Freq(10350);
 	  Tune_Status();
 
@@ -291,7 +326,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : VOL_P_Pin CHAN_M_Pin CHAN_P_Pin VOL_M_Pin */
   GPIO_InitStruct.Pin = VOL_P_Pin|CHAN_M_Pin|CHAN_P_Pin|VOL_M_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
@@ -316,6 +351,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI2_3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI2_3_IRQn);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
@@ -394,7 +436,7 @@ void Set_Property(uint16_t property, uint16_t value)
 {
   uint8_t cmd[6] = {0x12, 0x00, (property >> 8) & 0xFF, property & 0xFF, (value >> 8) & 0xFF, value & 0xFF};
   HAL_I2C_Master_Transmit(&hi2c1, ADDR, cmd, sizeof(cmd), HAL_MAX_DELAY);
-  HAL_Delay(100);
+//  HAL_Delay(100);
 }
 
 void Get_Property(void)
@@ -462,13 +504,16 @@ void Tune_Status(void)
 void Seek_Start(uint8_t up)
 {
     uint8_t arg1 = 0x04;
-    if (direction) {
+    if (up) {
         arg1 |= 0x08;
     }
 
 	uint8_t cmd[2] = {0x21, arg1};
 	HAL_I2C_Master_Transmit(&hi2c1, ADDR, cmd, sizeof(cmd), HAL_MAX_DELAY);
-	HAL_Delay(100);
+
+//	char msg[64];
+//	sprintf(msg, "Seeking...\r\n");
+//	Print_UART(msg);
 }
 
 void GPIO_Ctl(void)
