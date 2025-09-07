@@ -154,6 +154,10 @@ int main(void)
 	  Power_Up();
 	  Get_Rev();
 
+	  // Set GPOs low to avoid oscillation and excessivie current consumption
+	  GPIO_Ctl();
+	  GPIO_Set();
+
 	  // RX_VOLUME 0x4000 allowed 0-63, set to 30 (0x001E)
 	  Set_Property(0x4000, 0x001E);
 	  HAL_Delay(100);
@@ -373,7 +377,7 @@ void Print_UART(char *str)
 * CMD 0x01 (POWER_UP)
 * ARG1 0x10
 * 	CTSIEN 0 (disable interrupt)
-* 	GPO2OEN 0 (disable GPO2) TODO: apparently Hi-Z draws current due to oscillations
+* 	GPO2OEN 0 (disable GPO2)
 * 	PATCH 0 (boot normally)
 * 	XOSCEN 1 (use crystal oscillator)
 * 	FUNC 0 (FM receive)
@@ -516,14 +520,35 @@ void Seek_Start(uint8_t up)
 //	Print_UART(msg);
 }
 
+/*
+ * CMD 0x80
+ * ARG1 0x06
+ *   GPO3EN 0
+ *   GPO2EN 1
+ *   GPO1EN 1
+ *
+ * Note: GPO3 is overridden by DCLK.
+ * The other two should be drive low to avoid oscillation.
+ */
 void GPIO_Ctl(void)
 {
-  // TODO
+	uint8_t cmd[2] = {0x80, 0x06};
+	HAL_I2C_Master_Transmit(&hi2c1, ADDR, cmd, sizeof(cmd), HAL_MAX_DELAY);
+	HAL_Delay(100);
 }
 
+/*
+ * CMD 0x81
+ * ARG1 0x00
+ *   GPO3LEVEL 0
+ *   GPO2LEVEL 0
+ *   GPO1LEVEL 0
+ */
 void GPIO_Set(void)
 {
-  //TODO
+	uint8_t cmd[2] = {0x81, 0x00};
+	HAL_I2C_Master_Transmit(&hi2c1, ADDR, cmd, sizeof(cmd), HAL_MAX_DELAY);
+	HAL_Delay(100);
 }
 
 uint8_t Read_Status(void)
